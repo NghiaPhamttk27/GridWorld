@@ -7,3 +7,4 @@ gym_examples.egg-info/requires.txt
 gym_examples.egg-info/top_level.txt
 gym_examples/envs/__init__.py
 gym_examples/envs/grid_world.py
+gym_examples/envs/main.py
