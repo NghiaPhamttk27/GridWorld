@@ -51,6 +51,7 @@ class GridWorldEnv(gym.Env):
 
     def _get_obs(self):
         return {"agent": self._agent_location, "target": self._target_location}
+        # return np.concatenate([self._agent_location, self._target_location])
 
     def _get_info(self):
         return {
@@ -93,6 +94,7 @@ class GridWorldEnv(gym.Env):
         terminated = np.array_equal(
             self._agent_location, self._target_location)
         reward = 1 if terminated else 0  # Binary sparse rewards
+
         observation = self._get_obs()
         info = self._get_info()
 
