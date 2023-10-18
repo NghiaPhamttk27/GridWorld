@@ -7,7 +7,7 @@ from stable_baselines3.common.env_checker import check_env
 # Tạo môi trường với render_mode="human"
 env = gym.make('gym_examples/GridWorld-v0', render_mode="human")
 
-# check_env(env)
+check_env(env)
 
 model_dir = "models"
 model_name = "my_model"
