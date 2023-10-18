@@ -51,7 +51,6 @@ class GridWorldEnv(gym.Env):
 
     def _get_obs(self):
         return {"agent": self._agent_location, "target": self._target_location}
-        # return np.concatenate([self._agent_location, self._target_location])
 
     def _get_info(self):
         return {
@@ -91,9 +90,9 @@ class GridWorldEnv(gym.Env):
             self._agent_location + direction, 0, self.size - 1
         )
         # An episode is done iff the agent has reached the target
-        terminated = np.array_equal(
+        done = np.array_equal(
             self._agent_location, self._target_location)
-        reward = 1 if terminated else 0  # Binary sparse rewards
+        reward = 1 if done else 0  # Binary sparse rewards
 
         observation = self._get_obs()
         info = self._get_info()
@@ -101,7 +100,7 @@ class GridWorldEnv(gym.Env):
         if self.render_mode == "human":
             self._render_frame()
 
-        return observation, reward, terminated, False, info
+        return observation, reward, done, False, info
 
     def render(self):
         if self.render_mode == "rgb_array":
@@ -114,6 +113,7 @@ class GridWorldEnv(gym.Env):
             self.window = pygame.display.set_mode(
                 (self.window_size, self.window_size)
             )
+            self.window_minimized = False  # Thêm biến cờ để kiểm soát trạng thái cửa sổ
         if self.clock is None and self.render_mode == "human":
             self.clock = pygame.time.Clock()
 
@@ -158,6 +158,10 @@ class GridWorldEnv(gym.Env):
             )
 
         if self.render_mode == "human":
+            if self.window_minimized:
+                # Nếu cửa sổ đã được ẩn, hiển thị nó lại khi cần thiết
+                pygame.display.iconify()
+                self.window_minimized = False
             # The following line copies our drawings from `canvas` to the visible window
             self.window.blit(canvas, canvas.get_rect())
             pygame.event.pump()

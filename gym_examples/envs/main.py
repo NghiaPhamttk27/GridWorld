@@ -9,14 +9,28 @@ env = gym.make('gym_examples/GridWorld-v0', render_mode="human")
 
 # check_env(env)
 
-# Tạo mô hình
-model = PPO("MultiInputPolicy", env, verbose=1)
+model_dir = "models"
+model_name = "my_model"
+model_path = f"{model_dir}/{model_name}"
 
-obs, info = env.reset()
-n_steps = 100
-for _ in range(n_steps):
-    # Random action
-    action = env.action_space.sample()
-    obs, reward, terminated, truncated, info = env.step(action)
-    if terminated:
-        obs, info = env.reset()
+log_dir = "logs"
+
+# Tạo mô hình
+model = PPO("MultiInputPolicy", env, verbose=1, tensorboard_log=log_dir)
+# model = PPO.load(model_path, env)
+
+TIMESTEPS = 5
+
+model.learn(total_timesteps=1, reset_num_timesteps=True)
+model.save(f"{model_path}")
+
+
+# obs, info = env.reset()
+# n_steps = 1
+# for _ in range(n_steps):
+#     # Random action
+#     action = env.action_space.sample()
+#     obs, reward, done, truncated, info = env.step(action)
+#     if done:
+#         model.save(f"{model_path}")
+#         obs, info = env.reset()
